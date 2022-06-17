@@ -1,0 +1,39 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity tb_pseudo_mux is
+end tb_pseudo_mux;
+
+architecture teste of tb_pseudo_mux is
+	
+	component pseudo_mux is
+	port (
+        RESET   : in    std_logic; -- reset input
+        CLOCK   : in    std_logic; -- clock input
+        S       : in    std_logic; -- control input
+        A,B,C,D : in    std_logic; -- data inputs
+        Q       : out   std_logic  -- data output
+    );
+	end component;
+	
+	signal clock, reset, s, a, b, c, d, q: std_logic;
+    
+	
+	begin
+	instance_pseudo_mux: pseudo_mux port map (CLOCK=>clock, RESET=>reset, S=>s, A=>a, B=>b, C=>c, D=>d, Q=>q);
+	
+	clock <= '0', '1' after 20 ns, '0' after 30 ns, '1' after 40 ns, '0' after 50 ns, '1' after 60 ns, '0' after 70 ns, '1' after 80 ns, '0' after 90 ns, '1' after 100 ns, '0' after 110 ns, '1' after 120 ns, '0' after 130 ns, '1' after 140 ns;
+    
+	s <= '1';
+	a <= '1';
+	b <= '0';
+	c <= '1';
+	d <= '0';
+	--reset <= '0', '1' after 50 ns, '0' after 75 ns;
+   
+	--reset <= '1', '0' after 4 ns, '1' after 80 ns, '0' after 98 ns;
+
+
+
+end teste;
