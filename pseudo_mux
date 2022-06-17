@@ -1,0 +1,58 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity pseudo_mux is
+    port (
+        CLOCK, RESET   : in    std_logic; -- clock input
+        S       : in    std_logic; -- control input
+        A,B,C,D : in    std_logic; -- data inputs
+        Q       : out   std_logic  -- data output
+    );
+end pseudo_mux;
+
+architecture arch of pseudo_mux is
+type estados is (S0, S1, S2, S3);
+signal atual, proximo : estados;
+
+begin
+   process(RESET, CLOCK, proximo)
+		begin
+			if (RESET = '1') then
+				atual <= S0;
+			elsif (rising_edge(CLOCK)) then
+				atual <= proximo;
+			end if;
+		end process;
+	process(atual, A, B, C, D, S)
+		begin
+		case atual is
+			when S0 => 
+				Q <= A;
+				if (S = '1') then
+					proximo <= S1;
+				else proximo <= S0;
+				end if;
+			when S1 => 
+				Q <= B;
+				if (S = '1') then
+					proximo <= S2;
+				else proximo <= S1;
+				end if;	
+			when S2 => 
+				Q <= C;
+				if (S = '1') then
+					proximo <= S3;
+				else proximo <= S2;
+				end if;
+			when S3 => 
+				Q <= D;
+				if (S = '1') then
+					proximo <= S0;
+				else proximo <= S3;
+				end if;
+			when others => 
+				Q <= A;
+				proximo <= S0;
+		end case;		
+	end process;
+end arch;
